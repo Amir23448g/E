@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی کلیکر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://s32.picofile.com/file/8477756568/images_1_.jpeg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: white; /* برای قابل مشاهده بودن متن روی تصویر */
+        }
+
+        #game {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        img#clicker {
+            width: 200px; /* بزرگ‌تر کردن تصویر */
+            height: 200px;
+            cursor: pointer;
+            outline: none; /* حذف کردن مستطیل آبی */
+            -webkit-tap-highlight-color: transparent; /* حذف کردن هایلایت آبی در مرورگرهای موبایل */
+            user-select: none; /* جلوگیری از انتخاب تصویر */
+            border-radius: 50%; /* دایره کردن تصویر */
+            border: 5px solid #e0e0e0; /* اضافه کردن یک حاشیه خاکستری روشن به تصویر */
+            transition: transform 0.2s; /* افزودن افکت انتقال */
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-10px, 0); }
+            50% { transform: translate(10px, 0); }
+            75% { transform: translate(-10px, 0); }
+            100% { transform: translate(0, 0); }
+        }
+
+        img#clicker.shake {
+            animation: shake 0.5s;
+        }
+
+        #menu {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.6); /* پس‌زمینه نیمه شفاف */
+            padding: 10px;
+            color: white;
+            width: 100%;
+        }
+
+        #menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            outline: none; /* حذف کردن مستطیل آبی */
+        }
+
+        #menu a:focus {
+            outline: none; /* حذف کردن مستطیل آبی */
+            box-shadow: none; /* حذف کردن هایلایت آبی */
+        }
+
+        #menu a:hover {
+            text-decoration: underline;
+        }
+
+        /* جلوگیری از نمایش هایلایت آبی در تمام مرورگرها */
+        a {
+            -webkit-tap-highlight-color: transparent; /* مرورگرهای موبایل */
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <p>در حال بارگذاری...</p>
+    </div>
+    <div id="game" style="display: none;">
+        <h1>امتیاز: <span id="score">0</span></h1>
+        <img src="https://s32.picofile.com/file/8477756568/images_1_.jpeg" id="clicker" alt="سکه">
+    </div>
+    <div id="menu">
+        <a href="#" data-section="home">خانه</a>
+        <a href="#" data-section="tasks">وظایف</a>
+        <a href="#" data-section="invites">دعوت‌ها</a>
+        <a href="#" data-section="subordinates">زیرمجموعه‌ها</a>
+    </div>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('game').style.display = 'flex';
+            }, 2000); // 2 ثانیه تاخیر برای نمایش صفحه لودینگ
+
+            let score = 0;
+            const scoreDisplay = document.getElementById('score');
+            const clickerImage = document.getElementById('clicker');
+
+            clickerImage.addEventListener('click', function() {
+                score++;
+                scoreDisplay.textContent = score;
+
+                // افزودن کلاس لرزش
+                clickerImage.classList.add('shake');
+
+                // حذف کلاس لرزش پس از انیمیشن
+                setTimeout(function() {
+                    clickerImage.classList.remove('shake');
+                }, 500); // 0.5 ثانیه
+            });
+
+            document.querySelectorAll('#menu a').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // جلوگیری از تغییر آدرس صفحه
+                    const section = this.getAttribute('data-section');
+                    // باز کردن یک صفحه جدید با پیغام "Soon"
+                    const newWindow = window.open("", "_blank");
+                    newWindow.document.write(`
+                        <html>
+                        <head>
+                            <title>${section}</title>
+                            <style>
+                                body {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    height: 100vh;
+                                    margin: 0;
+                                    font-family: Arial, sans-serif;
+                                    background-color: #f9f9f9;
+                                    color: #333;
+                                    font-size: 24px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <p>Soon: ${section}</p>
+                        </body>
+                        </html>
+                    `);
+                    newWindow.document.close();
+                });
+            });
+        }
+    </script>
+</body>
+</html>
