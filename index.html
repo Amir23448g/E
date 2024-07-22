@@ -108,6 +108,28 @@
         a {
             -webkit-tap-highlight-color: transparent; /* مرورگرهای موبایل */
         }
+
+        #users {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #users ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #users li {
+            background: rgba(255, 255, 255, 0.8);
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -123,21 +145,35 @@
         <a href="#" data-section="tasks">وظایف</a>
         <a href="#" data-section="invites">دعوت‌ها</a>
         <a href="#" data-section="subordinates">زیرمجموعه‌ها</a>
+        <a href="#" data-section="users">کاربران</a>
+    </div>
+    <div id="users">
+        <h1>کاربران</h1>
+        <ul id="userList"></ul>
     </div>
     <script>
         window.onload = function() {
+            let userName = localStorage.getItem('userName');
+
+            if (!userName) {
+                userName = prompt('لطفاً نام خود را وارد کنید:');
+                localStorage.setItem('userName', userName);
+            }
+
             setTimeout(function() {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('game').style.display = 'flex';
             }, 2000); // 2 ثانیه تاخیر برای نمایش صفحه لودینگ
 
-            let score = 0;
+            let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
             const scoreDisplay = document.getElementById('score');
             const clickerImage = document.getElementById('clicker');
+            scoreDisplay.textContent = score;
 
             clickerImage.addEventListener('click', function() {
                 score++;
                 scoreDisplay.textContent = score;
+                localStorage.setItem('score', score);
 
                 // افزودن کلاس لرزش
                 clickerImage.classList.add('shake');
@@ -153,10 +189,13 @@
                     event.preventDefault(); // جلوگیری از تغییر آدرس صفحه
                     const section = this.getAttribute('data-section');
                     if (section === 'home') {
-                        // نمایش بخش بازی
                         document.getElementById('game').style.display = 'flex';
+                        document.getElementById('users').style.display = 'none';
+                    } else if (section === 'users') {
+                        document.getElementById('game').style.display = 'none';
+                        document.getElementById('users').style.display = 'flex';
+                        displayUsers();
                     } else {
-                        // باز کردن یک صفحه جدید با پیغام "Soon"
                         const newWindow = window.open("", "_blank");
                         newWindow.document.write(`
                             <html>
@@ -185,6 +224,21 @@
                     }
                 });
             });
+
+            function displayUsers() {
+                const userList = document.getElementById('userList');
+                userList.innerHTML = ''; // پاک کردن لیست کاربران
+
+                const users = JSON.parse(localStorage.getItem('users')) || {};
+                users[userName] = score; // بروزرسانی امتیاز کاربر فعلی
+                localStorage.setItem('users', JSON.stringify(users)); // ذخیره کاربران در localStorage
+
+                for (const user in users) {
+                    const li = document.createElement('li');
+                    li.textContent = `نام: ${user} - امتیاز: ${users[user]}`;
+                    userList.appendChild(li);
+                }
+            }
         }
     </script>
 </body>
