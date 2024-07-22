@@ -23,13 +23,30 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: white; /* برای قابل مشاهده بودن متن روی تصویر */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3; /* رنگ پس‌زمینه دایره */
+            border-top: 8px solid #3498db; /* رنگ دایره در حال چرخش */
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         #game {
             flex: 1;
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -67,6 +84,8 @@
             padding: 10px;
             color: white;
             width: 100%;
+            position: fixed;
+            bottom: 0;
         }
 
         #menu a {
@@ -93,9 +112,9 @@
 </head>
 <body>
     <div id="loading">
-        <p>در حال بارگذاری...</p>
+        <div class="spinner"></div>
     </div>
-    <div id="game" style="display: none;">
+    <div id="game">
         <h1>امتیاز: <span id="score">0</span></h1>
         <img src="https://s32.picofile.com/file/8477756568/images_1_.jpeg" id="clicker" alt="سکه">
     </div>
@@ -133,32 +152,37 @@
                 link.addEventListener('click', function(event) {
                     event.preventDefault(); // جلوگیری از تغییر آدرس صفحه
                     const section = this.getAttribute('data-section');
-                    // باز کردن یک صفحه جدید با پیغام "Soon"
-                    const newWindow = window.open("", "_blank");
-                    newWindow.document.write(`
-                        <html>
-                        <head>
-                            <title>${section}</title>
-                            <style>
-                                body {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    height: 100vh;
-                                    margin: 0;
-                                    font-family: Arial, sans-serif;
-                                    background-color: #f9f9f9;
-                                    color: #333;
-                                    font-size: 24px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <p>Soon: ${section}</p>
-                        </body>
-                        </html>
-                    `);
-                    newWindow.document.close();
+                    if (section === 'home') {
+                        // نمایش بخش بازی
+                        document.getElementById('game').style.display = 'flex';
+                    } else {
+                        // باز کردن یک صفحه جدید با پیغام "Soon"
+                        const newWindow = window.open("", "_blank");
+                        newWindow.document.write(`
+                            <html>
+                            <head>
+                                <title>${section}</title>
+                                <style>
+                                    body {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        height: 100vh;
+                                        margin: 0;
+                                        font-family: Arial, sans-serif;
+                                        background-color: #f9f9f9;
+                                        color: #333;
+                                        font-size: 24px;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <p>Soon: ${section}</p>
+                            </body>
+                            </html>
+                        `);
+                        newWindow.document.close();
+                    }
                 });
             });
         }
