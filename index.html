@@ -170,8 +170,8 @@
             const clickerImage = document.getElementById('clicker');
             scoreDisplay.textContent = score;
 
-            clickerImage.addEventListener('click', function() {
-                score++;
+            function updateScore(increment) {
+                score += increment;
                 scoreDisplay.textContent = score;
                 localStorage.setItem('score', score);
 
@@ -182,6 +182,16 @@
                 setTimeout(function() {
                     clickerImage.classList.remove('shake');
                 }, 500); // 0.5 ثانیه
+            }
+
+            // رویداد کلیک
+            clickerImage.addEventListener('click', function() {
+                updateScore(1);
+            });
+
+            // رویداد لمسی
+            clickerImage.addEventListener('touchstart', function(event) {
+                updateScore(event.touches.length);
             });
 
             document.querySelectorAll('#menu a').forEach(link => {
