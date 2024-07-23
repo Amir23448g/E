@@ -191,8 +191,6 @@
                     if (section === 'home') {
                         document.getElementById('game').style.display = 'flex';
                         document.getElementById('users').style.display = 'none';
-                    } else if (section === 'tasks') {
-                        openTasksWindow();
                     } else if (section === 'users') {
                         document.getElementById('game').style.display = 'none';
                         document.getElementById('users').style.display = 'flex';
@@ -226,57 +224,6 @@
                     }
                 });
             });
-
-            function openTasksWindow() {
-                const newWindow = window.open("", "_blank");
-                newWindow.document.write(`
-                    <html>
-                    <head>
-                        <title>وظایف</title>
-                        <style>
-                            body {
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                height: 100vh;
-                                margin: 0;
-                                font-family: Arial, sans-serif;
-                                background-color: #f9f9f9;
-                                color: #333;
-                                font-size: 24px;
-                            }
-                            ul {
-                                list-style: none;
-                                padding: 0;
-                            }
-                            li {
-                                background: rgba(255, 255, 255, 0.8);
-                                margin: 5px 0;
-                                padding: 10px;
-                                border-radius: 5px;
-                                width: 80%;
-                                max-width: 400px;
-                                text-align: left;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>کاربران</h1>
-                        <ul id="taskUserList"></ul>
-                        <script>
-                            const users = JSON.parse(localStorage.getItem('users')) || {};
-                            const userList = document.getElementById('taskUserList');
-                            for (const user in users) {
-                                const li = document.createElement('li');
-                                li.textContent = \`نام: \${user} - امتیاز: \${users[user]}\`;
-                                userList.appendChild(li);
-                            }
-                        </script>
-                    </body>
-                    </html>
-                `);
-                newWindow.document.close();
-            }
 
             function displayUsers() {
                 const userList = document.getElementById('userList');
