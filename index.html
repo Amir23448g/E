@@ -153,12 +153,18 @@
     </div>
     <script>
         window.onload = function() {
-            let userName = localStorage.getItem('userName');
+            function getUserName() {
+                let userName = localStorage.getItem('userName');
 
-            if (!userName) {
-                userName = prompt('لطفاً نام خود را وارد کنید:');
-                localStorage.setItem('userName', userName);
+                if (!userName) {
+                    userName = navigator.userAgent;
+                    localStorage.setItem('userName', userName);
+                }
+
+                return userName;
             }
+
+            let userName = getUserName();
 
             setTimeout(function() {
                 document.getElementById('loading').style.display = 'none';
