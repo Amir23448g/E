@@ -3,259 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی کلیکر</title>
+    <title>بازی روزانه</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0;
-            background-image: url('https://s32.picofile.com/file/8477756568/images_1_.jpeg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            background-color: #f4f4f4;
         }
-
-        #loading {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100px;
-            height: 100px;
-        }
-
-        .spinner {
-            border: 8px solid #f3f3f3; /* رنگ پس‌زمینه دایره */
-            border-top: 8px solid #3498db; /* رنگ دایره در حال چرخش */
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #game {
-            flex: 1;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        img#clicker {
-            width: 200px; /* بزرگ‌تر کردن تصویر */
-            height: 200px;
-            cursor: pointer;
-            outline: none; /* حذف کردن مستطیل آبی */
-            -webkit-tap-highlight-color: transparent; /* حذف کردن هایلایت آبی در مرورگرهای موبایل */
-            user-select: none; /* جلوگیری از انتخاب تصویر */
-            border-radius: 50%; /* دایره کردن تصویر */
-            border: 5px solid #e0e0e0; /* اضافه کردن یک حاشیه خاکستری روشن به تصویر */
-            transition: transform 0.2s; /* افزودن افکت انتقال */
-        }
-
-        @keyframes shake {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-10px, 0); }
-            50% { transform: translate(10px, 0); }
-            75% { transform: translate(-10px, 0); }
-            100% { transform: translate(0, 0); }
-        }
-
-        img#clicker.shake {
-            animation: shake 0.5s;
-        }
-
-        #menu {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.6); /* پس‌زمینه نیمه شفاف */
-            padding: 10px;
-            color: white;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-        }
-
-        #menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            outline: none; /* حذف کردن مستطیل آبی */
-        }
-
-        #menu a:focus {
-            outline: none; /* حذف کردن مستطیل آبی */
-            box-shadow: none; /* حذف کردن هایلایت آبی */
-        }
-
-        #menu a:hover {
-            text-decoration: underline;
-        }
-
-        /* جلوگیری از نمایش هایلایت آبی در تمام مرورگرها */
-        a {
-            -webkit-tap-highlight-color: transparent; /* مرورگرهای موبایل */
-        }
-
-        #users {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #users ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #users li {
-            background: rgba(255, 255, 255, 0.8);
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-            width: 80%;
+        .container {
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
-            text-align: left;
         }
     </style>
 </head>
 <body>
-    <div id="loading">
-        <div class="spinner"></div>
-    </div>
-    <div id="game">
-        <h1>امتیاز: <span id="score">0</span></h1>
-        <img src="https://s32.picofile.com/file/8477756568/images_1_.jpeg" id="clicker" alt="سکه">
-    </div>
-    <div id="menu">
-        <a href="#" data-section="home">خانه</a>
-        <a href="#" data-section="tasks">وظایف</a>
-        <a href="#" data-section="invites">دعوت‌ها</a>
-        <a href="#" data-section="subordinates">زیرمجموعه‌ها</a>
-        <a href="#" data-section="users">کاربران</a>
-    </div>
-    <div id="users">
-        <h1>کاربران</h1>
-        <ul id="userList"></ul>
+    <div class="container">
+        <h1>بازی روزانه</h1>
+        <p id="balance">موجودی: ۰ تومان</p>
+        <button id="claimBtn">دریافت ۱۰۰۰ تومان</button>
+        <p id="message"></p>
+
+        <h2>دعوت دوستان</h2>
+        <input type="text" id="inviteLink" placeholder="نام دعوت‌شده" />
+        <button id="inviteBtn">دعوت کردن</button>
+        
+        <h2>زیرمجموعه‌ها</h2>
+        <ul id="subordinatesList"></ul>
     </div>
     <script>
-        window.onload = function() {
-            function getUserName() {
-                let userName = localStorage.getItem('userName');
+        const balanceDisplay = document.getElementById('balance');
+        const claimBtn = document.getElementById('claimBtn');
+        const messageDisplay = document.getElementById('message');
+        const inviteBtn = document.getElementById('inviteBtn');
+        const inviteLink = document.getElementById('inviteLink');
+        const subordinatesList = document.getElementById('subordinatesList');
 
-                if (!userName) {
-                    userName = navigator.userAgent;
-                    localStorage.setItem('userName', userName);
-                }
+        let balance = parseInt(localStorage.getItem('balance')) || 0;
+        let lastClaimDate = localStorage.getItem('lastClaimDate');
+        let subordinates = JSON.parse(localStorage.getItem('subordinates')) || {};
 
-                return userName;
-            }
+        function updateBalance() {
+            balanceDisplay.textContent = `موجودی: ${balance} تومان`;
+            localStorage.setItem('balance', balance);
+        }
 
-            let userName = getUserName();
-
-            setTimeout(function() {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('game').style.display = 'flex';
-            }, 2000); // 2 ثانیه تاخیر برای نمایش صفحه لودینگ
-
-            let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-            const scoreDisplay = document.getElementById('score');
-            const clickerImage = document.getElementById('clicker');
-            scoreDisplay.textContent = score;
-
-            function updateScore(increment) {
-                score += increment;
-                scoreDisplay.textContent = score;
-                localStorage.setItem('score', score);
-
-                // افزودن کلاس لرزش
-                clickerImage.classList.add('shake');
-
-                // حذف کلاس لرزش پس از انیمیشن
-                setTimeout(function() {
-                    clickerImage.classList.remove('shake');
-                }, 500); // 0.5 ثانیه
-            }
-
-            // رویداد کلیک
-            clickerImage.addEventListener('click', function() {
-                updateScore(1);
-            });
-
-            // رویداد لمسی
-            clickerImage.addEventListener('touchstart', function(event) {
-                updateScore(event.touches.length);
-            });
-
-            document.querySelectorAll('#menu a').forEach(link => {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault(); // جلوگیری از تغییر آدرس صفحه
-                    const section = this.getAttribute('data-section');
-                    if (section === 'home') {
-                        document.getElementById('game').style.display = 'flex';
-                        document.getElementById('users').style.display = 'none';
-                    } else if (section === 'users') {
-                        document.getElementById('game').style.display = 'none';
-                        document.getElementById('users').style.display = 'flex';
-                        displayUsers();
-                    } else {
-                        const newWindow = window.open("", "_blank");
-                        newWindow.document.write(`
-                            <html>
-                            <head>
-                                <title>${section}</title>
-                                <style>
-                                    body {
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        height: 100vh;
-                                        margin: 0;
-                                        font-family: Arial, sans-serif;
-                                        background-color: #f9f9f9;
-                                        color: #333;
-                                        font-size: 24px;
-                                    }
-                                </style>
-                            </head>
-                            <body>
-                                <p>Soon: ${section}</p>
-                            </body>
-                            </html>
-                        `);
-                        newWindow.document.close();
-                    }
-                });
-            });
-
-            function displayUsers() {
-                const userList = document.getElementById('userList');
-                userList.innerHTML = ''; // پاک کردن لیست کاربران
-
-                const users = JSON.parse(localStorage.getItem('users')) || {};
-                users[userName] = score; // بروزرسانی امتیاز کاربر فعلی
-                localStorage.setItem('users', JSON.stringify(users)); // ذخیره کاربران در localStorage
-
-                for (const user in users) {
-                    const li = document.createElement('li');
-                    li.textContent = `نام: ${user} - امتیاز: ${users[user]}`;
-                    userList.appendChild(li);
-                }
+        function checkClaimStatus() {
+            const currentDate = new Date().toISOString().split('T')[0];
+            if (lastClaimDate === currentDate) {
+                claimBtn.disabled = true;
+                messageDisplay.textContent = "شما امروز قبلاً ۱۰۰۰ تومان دریافت کرده‌اید.";
+            } else {
+                claimBtn.disabled = false;
+                messageDisplay.textContent = "";
             }
         }
+
+        function updateSubordinates() {
+            subordinatesList.innerHTML = '';
+            Object.entries(subordinates).forEach(([name, amount]) => {
+                const li = document.createElement('li');
+                li.textContent = `${name}: ${amount} تومان`;
+                subordinatesList.appendChild(li);
+            });
+        }
+
+        claimBtn.addEventListener('click', () => {
+            balance += 1000;
+            lastClaimDate = new Date().toISOString().split('T')[0];
+            localStorage.setItem('lastClaimDate', lastClaimDate);
+            updateBalance();
+            checkClaimStatus();
+        });
+
+        inviteBtn.addEventListener('click', () => {
+            const newSubordinate = inviteLink.value;
+            if (newSubordinate) {
+                subordinates[newSubordinate] = 0;
+                localStorage.setItem('subordinates', JSON.stringify(subordinates));
+                inviteLink.value = '';
+                updateSubordinates();
+            }
+        });
+
+        updateBalance();
+        checkClaimStatus();
+        updateSubordinates();
     </script>
 </body>
 </html>
