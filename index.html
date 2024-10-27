@@ -53,11 +53,7 @@
             margin: 0 20px;
             font-size: 18px;
         }
-        .tasks-section {
-            display: none;
-            margin-top: 20px;
-        }
-        .friends-section {
+        .tasks-section, .friends-section {
             display: none;
             margin-top: 20px;
         }
@@ -134,32 +130,32 @@
         };
 
         document.getElementById('homeLink').onclick = function() {
-            document.getElementById('tasksSection').style.display = 'none'; // مخفی کردن بخش وظایف
-            document.getElementById('friendsSection').style.display = 'none'; // مخفی کردن بخش دوستان
-            document.getElementById('gameContent').style.display = 'block'; // نمایش محتوای بازی
+            document.getElementById('tasksSection').style.display = 'none';
+            document.getElementById('friendsSection').style.display = 'none';
+            document.getElementById('gameContent').style.display = 'block';
         };
 
         document.getElementById('tasksLink').onclick = function() {
-            document.getElementById('gameContent').style.display = 'none'; // مخفی کردن محتوای بازی
-            document.getElementById('friendsSection').style.display = 'none'; // مخفی کردن بخش دوستان
-            document.getElementById('tasksSection').style.display = 'block'; // نمایش بخش وظایف
+            document.getElementById('gameContent').style.display = 'none';
+            document.getElementById('friendsSection').style.display = 'none';
+            document.getElementById('tasksSection').style.display = 'block';
         };
 
         document.getElementById('friendsLink').onclick = function() {
-            document.getElementById('gameContent').style.display = 'none'; // مخفی کردن محتوای بازی
-            document.getElementById('tasksSection').style.display = 'none'; // مخفی کردن بخش وظایف
-            document.getElementById('friendsSection').style.display = 'block'; // نمایش بخش دوستان
-            generateInviteLink(); // تولید لینک دعوت
+            document.getElementById('gameContent').style.display = 'none';
+            document.getElementById('tasksSection').style.display = 'none';
+            document.getElementById('friendsSection').style.display = 'block';
+            generateInviteLink();
         };
 
         document.getElementById('backToHome').onclick = function() {
-            document.getElementById('tasksSection').style.display = 'none'; // مخفی کردن بخش وظایف
-            document.getElementById('gameContent').style.display = 'block'; // نمایش محتوای بازی
+            document.getElementById('tasksSection').style.display = 'none';
+            document.getElementById('gameContent').style.display = 'block';
         };
 
         document.getElementById('backToHomeFromFriends').onclick = function() {
-            document.getElementById('friendsSection').style.display = 'none'; // مخفی کردن بخش دوستان
-            document.getElementById('gameContent').style.display = 'block'; // نمایش محتوای بازی
+            document.getElementById('friendsSection').style.display = 'none';
+            document.getElementById('gameContent').style.display = 'block';
         };
 
         document.getElementById('copyLinkBtn').onclick = function() {
@@ -172,10 +168,10 @@
         };
 
         function generateInviteLink() {
-            const uniqueId = Math.random().toString(36).substring(2, 10); // تولید یک شناسه تصادفی
-            const botToken = '7314499715:AAFuNBRWPxgBARbdGjQAPSrb2Qa9-T5forc'; // توکن ربات
-            const inviteLink = `https://t.me/${botToken}/start?startapp=${uniqueId}`; // لینک دعوت
-            document.getElementById('inviteLink').textContent = inviteLink; // نمایش لینک دعوت
+            const uniqueId = Math.random().toString(36).substring(2, 10);
+            const botUsername = '@Vbuogi_bot';
+            const inviteLink = `https://t.me/${botUsername}?start=${uniqueId}`;
+            document.getElementById('inviteLink').textContent = inviteLink;
         }
 
         function displayMessage(message) {
@@ -211,7 +207,6 @@
             displayMessage(`شما ${earnings} تومان به موجودی خود اضافه کردید!`);
         }
 
-        // به‌روزرسانی زمان و تایمر
         updateTime();
         updateTimer();
     </script>
