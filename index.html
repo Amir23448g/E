@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mamad Coin</title>
+    <title>Coin Clicker Game</title>
     <style>
         body {
             display: flex;
@@ -11,328 +11,282 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            margin: 0;
-            background-color: #222;
-            color: #fff;
+            background: url('https://s32.picofile.com/file/8480191634/64d4c1723b692.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* جلوگیری از پیمایش */
-        }
+            margin: 0;
+            position: relative;
+          
+        .}
 
-        /* استایل صفحه لودینگ */
-        .loader {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #222;
+        /* Glassy menu */
+        #menu {
             position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 10;
-        }
-
-        .loader span {
-            font-size: 1.5em;
-            color: #4caf50;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .menu {
+            bottom: 20px;
+            width: 90%;
+            max-width: 400px;
+            padding: 10px;
+            border-radius: 10px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            background-color: #333;
-            width: 100%;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            left: 0;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .menu a {
-            color: #fff;
+     #menu a {
+    outline: none;
+    -webkit-tap-highlight-color: transparent; /* Remove blue highlight on touch devices */
+            color: white;
             text-decoration: none;
-            font-size: 1.2em;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-            cursor: pointer;
-        }
-
-        .menu a:hover {
-            background-color: #444;
-        }
-
-        .container, .shop, .tasks, .friends {
+            padding: 10px 15px;
+            border-radius: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            font-size: 12px;
+            width: 70px; /* Uniform width for each option */
         }
 
-        .container { display: block; }
-        .shop, .tasks, .friends { display: none; }
-
-        .title {
-            font-size: 2em;
-            margin-bottom: 10px;
+        #menu img {
+            width: 24px; /* Icon size */
+            height: 24px; /* Icon size */
+            margin-bottom: 5px; /* Space below icon */
         }
 
-        #coin-count {
-            font-size: 1.2em;
-            color: #aaa;
+        #balance {
+            font-size: 2rem;
+            position: relative;
+            top: -50px;
             margin-bottom: 20px;
         }
 
-        #energy-count {
-            font-size: 1.2em;
-            color: #aaa;
-            margin-bottom: 20px;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-
-        .coin-container {
-            position: relative;
-            display: inline-block;
-            perspective: 1000px;
-        }
-
-        #coin {
-            width: 180px;
-            height: 180px;
+       #coin {
+    outline: none;
+    -webkit-tap-highlight-color: transparent; /* Remove blue highlight on touch devices */
+            width: 150px;
+            height: 150px;
+            background: url('https://s32.picofile.com/file/8480194676/shtn.png') no-repeat center center;
+            background-size: cover;
             cursor: pointer;
-            border-radius: 50%;
-            background: url("https://s32.picofile.com/file/8480102868/IMG_20241028_160149_129.jpg") center/cover;
-            box-shadow: inset -10px -10px 15px rgba(0, 0, 0, 0.5), 5px 5px 10px rgba(0, 0, 0, 0.3);
-            transform-style: preserve-3d;
-            transform: rotateX(10deg) rotateY(-10deg);
-            transition: transform 0.2s;
+            position: relative;
+            top: -30px;
+            transition: transform 0.3s;
         }
 
-        .shop-items, .task-content {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 80%;
+        /* Black and white style for the coin */
+        .bw {
+            filter: grayscale(100%);
         }
 
-        .shop-item, .task-content p, .task-content a {
-            background-color: #333;
-            border-radius: 8px;
-            padding: 15px;
-            color: #fff;
-            font-size: 1.2em;
+        /* Container for dynamic content */
+        #content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 50px; /* Distance from top of page */
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             text-align: center;
-            transition: background-color 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            perspective: 1000px;
-        }
-
-        .shop-item:hover {
-            background-color: #444;
-            transform: translateY(-5px);
-        }
-
-        .plus {
-            position: absolute;
-            color: #4caf50;
-            font-size: 1.5em;
-            font-weight: bold;
-            animation: moveUp 0.5s ease-out forwards;
-        }
-
-        @keyframes moveUp {
-            0% { opacity: 1; top: 50%; left: 50%; transform: translate(-50%, 0); }
-            100% { opacity: 0; top: 10%; transform: translate(-50%, -40px); }
-        }
-
-        .error-message, .success-message {
-            color: #ff5555;
-            margin-top: 10px;
-            font-size: 1em;
-            display: none;
-        }
-
-        .success-message {
-            color: #4caf50;
-        }
-
-        .friends {
-            font-size: 2em;
-            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="loader" id="loader">
-        <span>Loding...</span>
-    </div>
-    <div class="container" id="game-section">
-        <div class="title">Mamad Coin</div>
-        <div id="energy-count">
-          ⚡️: <span id="energy">1000</span>
-        </div>
-        <div id="coin-count">
-            <span id="balance">0</span> MamadCoin Balance
-        </div>
-        <div class="coin-container">
-            <div id="coin"></div>
-        </div>
-        <div class="error-message" id="error-message">You don't have enough money!</div>
-        <div class="success-message" id="success-message"> Purchase was successfully purchased</div>
+    <div id="balance">Balance: 0.0000</div>
+    <div id="coin"></div>
+
+    <!-- Glassy Menu -->
+    <div id="menu">
+        <a href="#" onclick="openPage('mine'); return false;">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/diamond.png" alt="Mine">
+            <span>Mine</span>
+        </a>
+        <a href="#" onclick="openPage('mini-game'); return false;">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/controller.png" alt="Mini Game">
+            <span>Mini Game</span>
+        </a>
+        <a href="#" onclick="openPage('airdrop'); return false;">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/airdrop.png" alt="Airdrop">
+            <span>Airdrop</span>
+        </a>
+        <a href="#" onclick="openPage('tasks'); return false;">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/tasks.png" alt="Tasks">
+            <span>Tasks</span>
+        </a>
+        <a href="#" onclick="openPage('friends'); return false;">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/friends.png" alt="Friends">
+            <span>Friends</span>
+        </a>
     </div>
 
-    <div class="shop" id="shop-section">
-        <div class="title">Purchases</div>
-        <div class="shop-items">
-            <div class="shop-item" id="rocket-item" onclick="buyRocket()">rocket - Qi: <span id="rocket-price">100</span>coin</div>
-            <div class="shop-item" id="clicker-upgrade-item" onclick="upgradeClicker()">Clicker upgrade _price : <span id="clicker-price">200</span> coin</div>
-        </div>
-        <div class="error-message" id="shop-error-message">mojodi kafi nist!</div>
+    <!-- Content Area -->
+    <div id="content">
+        <h2 id="page-title"></h2>
+        <p id="page-content"></p>
+        <button onclick="closePage()">Close</button>
     </div>
-
-    <div class="tasks" id="tasks-section">
-        <div class="title">vazayef</div>
-        <div class="task-content">
-            <button id="join-button" onclick="joinChannel()">Join the channel and see the description</button>
-            <a href="https://youtube.com/@user-aryan23562?si=A_n80SWvv-TQflgu" target="_blank" class="shop-item">YouTube</a>
-        </div>
-    </div>
-
-    <div class="friends" id="friends-section">
-        <div class="title">friends</div>
-        <div>𝐂𝐨𝐦𝐢𝐠 𝐒𝐨𝐨𝐧...</div>
-    </div>
-
-    <nav class="menu">
-        <a onclick="showSection('game')">mine</a>
-        <a onclick="showSection('shop')">shopping</a>
-        <a onclick="showSection('tasks')">Duties</a>
-      <a onclick="showSection('friends')">friends</a>
-    </nav>
 
     <script>
-        let coinCount = 0;
-        let energy = 1000; // مقدار اولیه انرژی
-        let rocketPrice = 100;
-        let clickerPrice = 200;
-        let clickerPower = 1;
-        let isRocketActive = false;
-        let rocketTimeout;
+        let balance = 0.0000;
+        let intervalId = null;
         const balanceDisplay = document.getElementById("balance");
-        const energyDisplay = document.getElementById("energy");
-        const rocketPriceDisplay = document.getElementById("rocket-price");
-        const clickerPriceDisplay = document.getElementById("clicker-price");
-        const errorMessage = document.getElementById("error-message");
-        const shopErrorMessage = document.getElementById("shop-error-message");
-        const successMessage = document.getElementById("success-message");
-        const loader = document.getElementById("loader");
+        const coin = document.getElementById("coin");
+        const contentDiv = document.getElementById("content");
+        const pageTitle = document.getElementById("page-title");
+        const pageContent = document.getElementById("page-content");
 
-        // کلیک روی سکه
-        document.getElementById("coin").onclick = function () {
-            if (energy > 0) {
-                coinCount += clickerPower; // به مقدار سکه‌ها اضافه کن
-                energy--; // کاهش انرژی به ازای هر کلیک
-                updateDisplays();
-                showPlusAnimation();
-            } else {
-                errorMessage.style.display = "block";
-                setTimeout(() => { errorMessage.style.display = "none"; }, 2000);
+        function updateBalanceDisplay() {
+            balanceDisplay.textContent = `Balance: ${balance.toFixed(4)}`;
+            checkBalance(); // Check balance after updating display
+        }
+
+        function startCollecting() {
+            if (intervalId) return; // Avoid starting multiple intervals
+
+            intervalId = setInterval(() => {
+                if (balance < 0.0200) {
+                    balance += 0.0001; // Increase balance every 50ms
+                    updateBalanceDisplay();
+                    console.log(`Balance updated: ${balance.toFixed(4)}`); // Log balance for debugging
+                } else {
+                    stopCollecting(); // Stop if balance reaches or exceeds 0.0200
+                }
+            }, 250);
+        }
+
+        function stopCollecting() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                console.log(`Collecting stopped. Final balance: ${balance.toFixed(4)}`); // Log stop for debugging
             }
-        };
-
-        function showPlusAnimation() {
-            const plus = document.createElement("div");
-            plus.className = "plus";
-            plus.innerText = "+1";
-            document.body.appendChild(plus);
-            plus.style.top = `${window.innerHeight / 2}px`;
-            plus.style.left = `${window.innerWidth / 2}px`;
-            setTimeout(() => {
-                plus.remove();
-            }, 500);
+            intervalId = null; // Reset intervalId
         }
 
-        // نمایش مقدار سکه‌ها و انرژی
-        function updateDisplays() {
-            balanceDisplay.innerText = coinCount;
-            energyDisplay.innerText = energy;
-        }
-
-        // خرید موشک
-        function buyRocket() {
-            if (coinCount >= rocketPrice) {
-                coinCount -= rocketPrice; // کم کردن قیمت موشک از سکه‌ها
-                energy += 10; // افزایش انرژی
-                rocketPrice *= 2; // دو برابر کردن قیمت
-                rocketPriceDisplay.innerText = rocketPrice;
-                updateDisplays();
-                successMessage.style.display = "block";
-                setTimeout(() => { successMessage.style.display = "none"; }, 2000);
-            } else {
-                shopErrorMessage.style.display = "block";
-                setTimeout(() => { shopErrorMessage.style.display = "none"; }, 2000);
+        function checkBalance() {
+            if (balance >= 0.0200) {
+                stopCollecting();
+                coin.classList.add('bw'); // Add black and white class to the coin
+                alert("Balance has reached 0.0200! Collecting has stopped and the coin color has changed.");
+                setTimeout(() => {
+                    coin.classList.remove('bw'); // Remove black and white class
+                    balance = 0.0000; // Reset balance
+                    updateBalanceDisplay();
+                    alert("The coin color has returned to gold, and you can start collecting again.");
+                }, 24 * 60 * 60 * 1000); // After 24 hours
             }
         }
 
-        // ارتقا کلیکر
-        function upgradeClicker() {
-            if (coinCount >= clickerPrice) {
-                coinCount -= clickerPrice; // کم کردن قیمت ارتقا از سکه‌ها
-                clickerPower++; // افزایش قدرت کلیکر
-                clickerPrice *= 2; // دو برابر کردن قیمت
-                clickerPriceDisplay.innerText = clickerPrice;
-                updateDisplays();
-                successMessage.style.display = "block";
-                setTimeout(() => { successMessage.style.display = "none"; }, 2000);
-            } else {
-                shopErrorMessage.style.display = "block";
-                setTimeout(() => { shopErrorMessage.style.display = "none"; }, 2000);
-            }
+        function openPage(page) {
+    document.getElementById("balance").style.display = 'none';
+    document.getElementById("coin").style.display = 'none';
+    contentDiv.style.display = 'block';
+
+    if (page === 'mine') {
+        document.getElementById("balance").style.display = 'block';
+        document.getElementById("coin").style.display = 'block';
+        contentDiv.style.display = 'none';
+    } else if (page === 'mini-game') {
+        pageTitle.textContent = "Mini Game";
+        pageContent.innerHTML = "<strong style='font-size: 1.5rem;'>𝐂𝐨𝐦𝐢𝐧𝐠 𝐒𝐨𝐨𝐧...</strong>";
+    } else if (page === 'airdrop') {
+        pageTitle.textContent = "Airdrop";
+        pageContent.innerHTML = `
+        `;
+    } else if (page === 'tasks') {
+        pageTitle.textContent = "Tasks";
+        pageContent.innerHTML = `
+            <p>Follow us on social media!</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="https://t.me/YourTelegramLink" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/telegram-app.png" alt="Telegram" width="40">
+                </a>
+                <a href="https://www.youtube.com/YourYouTubeLink" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/youtube-play.png" alt="YouTube" width="40">
+                </a>
+                <a href="https://www.facebook.com/YourFacebookLink" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/facebook.png" alt="Facebook" width="40">
+                </a>
+                <a href="https://twitter.com/YourTwitterLink" target="_blank">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/twitter.png" alt="Twitter" width="40">
+                </a>
+            </div>
+            <hr style="margin: 20px 0;">
+            <p>Special Tasks</p>
+            <ul style="list-style-type: none; padding: 0;">
+                <li>Complete daily tasks to earn more rewards.</li>
+                <li>Invite friends and get bonuses.</li>
+                <li>Watch videos to earn extra points:</li>
+            </ul>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <a href="https://www.youtube.com/channel/YOUR_CHANNEL_ID_1" target="_blank" style="display: flex; align-items: center; padding: 10px; border: 1px solid #fff; border-radius: 5px; text-decoration: none; color: #fff;">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/youtube-play.png" alt="YouTube Video 1" width="30" style="margin-right: 10px;">
+                    <span>Watch Video 1</span>
+                </a>
+                <a href="https://www.youtube.com/channel/YOUR_CHANNEL_ID_2" target="_blank" style="display: flex; align-items: center; padding: 10px; border: 1px solid #fff; border-radius: 5px; text-decoration: none; color: #fff;">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/youtube-play.png" alt="YouTube Video 2" width="30" style="margin-right: 10px;">
+                    <span>Watch Video 2</span>
+                </a>
+                <a href="https://www.youtube.com/channel/YOUR_CHANNEL_ID_3" target="_blank" style="display: flex; align-items: center; padding: 10px; border: 1px solid #fff; border-radius: 5px; text-decoration: none; color: #fff;">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/youtube-play.png" alt="YouTube Video 3" width="30" style="margin-right: 10px;">
+                    <span>Watch Video 3</span>
+                </a>
+            </div>
+        `;
+    } else if (page === 'friends') {
+        pageTitle.textContent = "Friends";
+        pageContent.innerHTML = `
+            <h3>Invite Link</h3>
+            <div style="padding: 10px; border: 1px solid #fff; border-radius: 5px; background-color: #333;">
+                <p>Share this link to invite friends:</p>
+                <input type="text" value="https://t.me/YourBot?start=invite123" readonly style="width: 100%; padding: 8px; border: none; background-color: #444; color: #fff;">
+                <button onclick="copyInviteLink()" style="margin-top: 10px; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px;">Copy Link</button>
+            </div>
+            <hr style="margin: 20px 0;">
+            <h3>Subordinates</h3>
+            <div style="padding: 10px; border: 1px solid #fff; border-radius: 5px; background-color: #333;">
+                <p>List of your subordinates:</p>
+                <ul id="subordinatesList" style="list-style-type: none; padding: 0;">
+                    <li>John Doe - 500 coins</li>
+                    <li>Jane Smith - 350 coins</li>
+                    <li>Adam Johnson - 120 coins</li>
+                </ul>
+            </div>
+        `;
+    }
+}
+
+
+function copyInviteLink() {
+    const inviteLink = document.querySelector("input[type='text']");
+    inviteLink.select();
+    document.execCommand("copy");
+    alert("Invite link copied!");
+}
+
+
+        function closePage() {
+            contentDiv.style.display = 'none';
+            document.getElementById("balance").style.display = 'block';
+            document.getElementById("coin").style.display = 'block';
         }
 
-        // نمایش بخش‌های مختلف
-        function showSection(section) {
-            document.getElementById("game-section").style.display = "none";
-            document.getElementById("shop-section").style.display = "none";
-            document.getElementById("tasks-section").style.display = "none";
-            document.getElementById("friends-section").style.display = "none";
+        // Event listeners for mouse down and up
+        coin.addEventListener('mousedown', startCollecting);
+        coin.addEventListener('mouseup', stopCollecting);
+        coin.addEventListener('mouseleave', stopCollecting); // Stop if mouse leaves the coin
 
-            if (section === 'game') {
-                document.getElementById("game-section").style.display = "block";
-            } else if (section === 'shop') {
-                document.getElementById("shop-section").style.display = "block";
-            } else if (section === 'tasks') {
-                document.getElementById("tasks-section").style.display = "block";
-            } else if (section === 'friends') {
-                document.getElementById("friends-section").style.display = "block";
-            }
-        }
+        // Touch events for mobile devices
+        coin.addEventListener('touchstart', startCollecting);
+        coin.addEventListener('touchend', stopCollecting);
 
-        // عملکرد بارگذاری صفحه
-        window.onload = function() {
-            setTimeout(() => {
-                loader.style.display = "none";
-                showSection('game'); // نمایش بخش خانه پس از بارگذاری
-            }, 2000); // زمان تأخیر 2 ثانیه
-        };
-
-        // عضو کانال شوید
-        function joinChannel() {
-            alert("شما به کانال پیوستید!");
-        }
     </script>
 </body>
+</html>
 </html>
